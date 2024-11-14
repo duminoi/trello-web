@@ -1,4 +1,4 @@
-### Bộ code base để bắt đầu học khóa Full Stack MERN Pro (HỌC PHẦN FRONT-END: REACTJS - MATERIAL UI - REDUX...vv) - Lập Trình qua dự án thực tế Trello Clone trên kênh YouTube TrungQuanDev của mình nhé các bạn!
+<!-- ### Bộ code base để bắt đầu học khóa Full Stack MERN Pro (HỌC PHẦN FRONT-END: REACTJS - MATERIAL UI - REDUX...vv) - Lập Trình qua dự án thực tế Trello Clone trên kênh YouTube TrungQuanDev của mình nhé các bạn!
 ### Base project for my Full Stack MERN Pro Course - Build Trello App on YouTube!
 
 - Playlist khóa Pro: https://www.youtube.com/playlist?list=PLP6tw4Zpj-RJP2-YrhtkWqObMQ-AA4TDy
@@ -84,4 +84,4 @@ YouTube 02 (CodeTQ - ASMR Programming): https://www.youtube.com/@code-tq
 
 "A bit of fragrance clings to the hand that gives flowers!"
 
-Thanks for watching!
+Thanks for watching! -->
