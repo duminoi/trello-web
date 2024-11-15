@@ -1,4 +1,3 @@
-// Updated by trungquandev.com's author on May 13 2023
 // Sample Eslint config for React project
 module.exports = {
   env: { browser: true, es2020: true, node: true },
@@ -32,7 +31,7 @@ module.exports = {
     'object-curly-spacing': [1, 'always'],
     'indent': ['warn', 2],
     'semi': [1, 'never'],
-    'quotes': ['error', 'single'],
+    'quotes': 0,
     'array-bracket-spacing': 1,
     'linebreak-style': 0,
     'no-unexpected-multiline': 'warn',
