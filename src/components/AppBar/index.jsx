@@ -64,6 +64,7 @@ export default function AppBar() {
           type="search"
           size="small"
         />
+        {/* search */}
         <ModeSelect />
 
         <Tooltip title="Notifications">
@@ -73,6 +74,7 @@ export default function AppBar() {
             </Badge>
           </IconButton>
         </Tooltip>
+        {/* notification */}
 
         <Tooltip title="Help">
           <IconButton>
@@ -81,6 +83,7 @@ export default function AppBar() {
             </Badge>
           </IconButton>
         </Tooltip>
+        {/* help */}
 
         <Profile />
       </Box>

@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Check from '@mui/icons-material/Check'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Box } from '@mui/material'
 export default function Starred() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -18,7 +19,7 @@ export default function Starred() {
     setAnchorEl(null)
   }
   return (
-    <div>
+    <Box>
       <Button
         id="basic-button-starred"
         aria-controls={open ? 'basic-menu-starred' : undefined}
@@ -65,6 +66,6 @@ export default function Starred() {
           <ListItemText>Custom spacing...</ListItemText>
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   )
 }

@@ -12,6 +12,7 @@ import ContentCopy from '@mui/icons-material/ContentCopy'
 import ContentPaste from '@mui/icons-material/ContentPaste'
 import Cloud from '@mui/icons-material/Cloud'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Box } from '@mui/material'
 export default function Workspaces() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -22,7 +23,7 @@ export default function Workspaces() {
     setAnchorEl(null)
   }
   return (
-    <div>
+    <Box>
       <Button
         id="basic-button-workspaces"
         aria-controls={open ? 'basic-menu-workspaces' : undefined}
@@ -77,6 +78,6 @@ export default function Workspaces() {
           <ListItemText>Web Clipboard</ListItemText>
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   )
 }

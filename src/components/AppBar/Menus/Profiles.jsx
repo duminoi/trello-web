@@ -1,13 +1,17 @@
 // import React from 'react'
 import { useState } from 'react'
-import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
-import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import Check from '@mui/icons-material/Check'
 import Avatar from '@mui/material/Avatar'
+import avatar from '~/assets/dog.jfif'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import { Box } from '@mui/material'
+import PersonAdd from '@mui/icons-material/PersonAdd'
+import Settings from '@mui/icons-material/Settings'
+import Logout from '@mui/icons-material/Logout'
 export default function Profile() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -18,52 +22,83 @@ export default function Profile() {
     setAnchorEl(null)
   }
   return (
-    <div>
-      <Button
-        id="basic-button-profile"
-        aria-controls={open ? 'basic-menu-profile' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-      </Button>
+    <Box>
+      <Tooltip title="Account settings">
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ padding: 0 }}
+          aria-controls={open ? 'basic-menu-profiles' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+        >
+          <Avatar sx={{ width: 32, height: 32 }} alt="Duminoi" src={avatar}>
+            M
+          </Avatar>
+        </IconButton>
+      </Tooltip>
+
       <Menu
-        id="basic-menu-profile"
         anchorEl={anchorEl}
+        id="basic-menu-profiles"
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1
+            },
+            '&::before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0
+            }
+          }
         }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <ListItemText inset>Single</ListItemText>
+        <MenuItem onClick={handleClose}>
+          <Avatar /> Profile
         </MenuItem>
-        <MenuItem>
-          <ListItemText inset>1.15</ListItemText>
+        <MenuItem onClick={handleClose}>
+          <Avatar /> My account
         </MenuItem>
-        <MenuItem>
-          <ListItemText inset>Double</ListItemText>
-        </MenuItem>
-        <MenuItem>
+        <Divider />
+        <MenuItem onClick={handleClose}>
           <ListItemIcon>
-            <Check />
+            <PersonAdd fontSize="small" />
           </ListItemIcon>
-          Custom: 1.2
+          Add another account
         </MenuItem>
-        <Divider />
-        <MenuItem>
-          <ListItemText>Add space before paragraph</ListItemText>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
         </MenuItem>
-        <MenuItem>
-          <ListItemText>Add space after paragraph</ListItemText>
-        </MenuItem>
-        <Divider />
-        <MenuItem>
-          <ListItemText>Custom spacing...</ListItemText>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   )
 }

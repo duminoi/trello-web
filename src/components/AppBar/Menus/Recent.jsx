@@ -8,6 +8,7 @@ import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Check from '@mui/icons-material/Check'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Box } from '@mui/material'
 export default function Recent() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
@@ -18,7 +19,7 @@ export default function Recent() {
     setAnchorEl(null)
   }
   return (
-    <div>
+    <Box>
       <Button
         id="basic-button-recent"
         aria-controls={open ? 'basic-menu-recent' : undefined}
@@ -65,6 +66,6 @@ export default function Recent() {
           <ListItemText>Custom spacing...</ListItemText>
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   )
 }
