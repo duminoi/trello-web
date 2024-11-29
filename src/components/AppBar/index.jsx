@@ -25,10 +25,13 @@ export default function AppBar() {
       py={4}
       sx={{
         width: '100%',
-        height: (theme) => theme.trello.appBarHeight,
+        height: '48px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        gap: 2,
+        overflowX: 'auto',
+        overflowY: 'hidden'
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -51,11 +54,14 @@ export default function AppBar() {
             Trello
           </Typography>
         </Box>
-        <Workspaces></Workspaces>
-        <Recent></Recent>
-        <Starred></Starred>
-        <Templates></Templates>
-        <Button variant="outlined">CREATE</Button>
+
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+          <Workspaces></Workspaces>
+          <Recent></Recent>
+          <Starred></Starred>
+          <Templates></Templates>
+          <Button variant="outlined">CREATE</Button>
+        </Box>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -64,6 +70,7 @@ export default function AppBar() {
           label="Search..."
           type="search"
           size="small"
+          sx={{ minWidth: '120px' }}
         />
         {/* search */}
         <ModeSelect />
@@ -71,7 +78,7 @@ export default function AppBar() {
         <Tooltip title="Notifications">
           <IconButton>
             <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer' }}>
-              <NotificationsNoneIcon sx={{color: 'primary.main'}} />
+              <NotificationsNoneIcon sx={{ color: 'primary.main' }} />
             </Badge>
           </IconButton>
         </Tooltip>
@@ -80,7 +87,7 @@ export default function AppBar() {
         <Tooltip title="Help">
           <IconButton>
             <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer' }}>
-              <HelpOutlineIcon sx={{color: 'primary.main'}} />
+              <HelpOutlineIcon sx={{ color: 'primary.main' }} />
             </Badge>
           </IconButton>
         </Tooltip>
