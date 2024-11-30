@@ -21,7 +21,7 @@ const theme = extendTheme({
       }
     }
   },
-  components: {
+  components: { // styleOverrides is override default css
     MuiCssBaseline: {
       styleOverrides: {
         body: {
@@ -38,7 +38,7 @@ const theme = extendTheme({
             borderRadius: '8px'
           }
         }
-      }
+      } // css for scrollbar
     },
     MuiButton: {
       styleOverrides: {

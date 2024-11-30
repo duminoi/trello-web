@@ -17,6 +17,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profile from './Menus/Profiles'
+import { ReactComponent as AddIcon } from '~/assets/AddIcon.svg'
 
 export default function AppBar() {
   return (
@@ -60,7 +61,19 @@ export default function AppBar() {
           <Recent></Recent>
           <Starred></Starred>
           <Templates></Templates>
-          <Button variant="outlined">CREATE</Button>
+          <Button variant="outlined" sx={{padding: '5px 7px'}}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                fontSize: 'small'
+              }}
+            >
+              Create
+              <SvgIcon inheritViewBox component={AddIcon}></SvgIcon>
+            </Box>
+          </Button>
         </Box>
       </Box>
 
