@@ -32,24 +32,26 @@ export default function AppBar() {
         paddingX: 2,
         paddingY: 4,
         overflowX: 'auto',
-        overflowY: 'hidden'
+        overflowY: 'hidden',
+        bgcolor: (theme) =>
+          theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <AppsIcon sx={{ color: 'primary.main' }}></AppsIcon>
+        <AppsIcon sx={{ color: 'white' }}></AppsIcon>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           <SvgIcon
             component={TrelloIcon}
             fontSize="small"
             inheritViewBox
-            sx={{ color: 'primary.main' }}
+            sx={{ color: 'white' }}
           ></SvgIcon>
           <Typography
             variant="span"
             sx={{
               fontSize: '1.2rem',
               fontWeight: 'bold',
-              color: 'primary.main'
+              color: 'white'
             }}
           >
             Trello
@@ -61,7 +63,17 @@ export default function AppBar() {
           <Recent></Recent>
           <Starred></Starred>
           <Templates></Templates>
-          <Button variant="outlined" endIcon={<AddToPhotosIcon />}>
+          <Button
+            sx={{
+              color: 'white',
+              border: 'none',
+              '&:hover': {
+                border: 'none'
+              }
+            }}
+            variant="outlined"
+            startIcon={<AddToPhotosIcon />}
+          >
             Create
           </Button>
         </Box>
@@ -74,6 +86,13 @@ export default function AppBar() {
           type="search"
           size="small"
           sx={{ minWidth: '120px' }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircle />
+              </InputAdornment>
+            )
+          }}
         />
         {/* search */}
         <ModeSelect />
@@ -81,7 +100,7 @@ export default function AppBar() {
         <Tooltip title="Notifications">
           <IconButton>
             <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer' }}>
-              <NotificationsNoneIcon sx={{ color: 'primary.main' }} />
+              <NotificationsNoneIcon sx={{ color: 'white' }} />
             </Badge>
           </IconButton>
         </Tooltip>
@@ -90,7 +109,7 @@ export default function AppBar() {
         <Tooltip title="Help">
           <IconButton>
             <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer' }}>
-              <HelpOutlineIcon sx={{ color: 'primary.main' }} />
+              <HelpOutlineIcon sx={{ color: 'white' }} />
             </Badge>
           </IconButton>
         </Tooltip>
