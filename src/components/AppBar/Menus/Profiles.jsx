@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Avatar from '@mui/material/Avatar'
-import avatar from '~/assets/dog.jfif'
+import avatar from '~/assets/Avatar/dog.jfif'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import { Box } from '@mui/material'
@@ -32,7 +32,7 @@ export default function Profile() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }} alt="Duminoi" src={avatar}>
+          <Avatar sx={{ width: 34, height: 34 }} alt="Duminoi" src={avatar}>
             M
           </Avatar>
         </IconButton>
