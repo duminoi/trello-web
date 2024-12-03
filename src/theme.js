@@ -68,7 +68,14 @@ const theme = extendTheme({
             //   }
             // },
             '& fieldset': {
-              borderWidth: '1px ! important'
+              // borderWidth: '0.5px ! important'
+              borderWidth: '0.5px !important'
+            },
+            '&:hover fieldset': {
+              borderWidth: '2px !important'
+            },
+            '&.Mui-focused fieldset': {
+              borderWidth: '2px !important'
             }
           }
         }
