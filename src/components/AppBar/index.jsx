@@ -142,7 +142,7 @@ export default function AppBar() {
 
         <Tooltip title="Notifications">
           <IconButton>
-            <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer' }}>
+            <Badge color="warning" variant="dot" sx={{ cursor: 'pointer' }}>
               <NotificationsNoneIcon sx={{ color: 'white' }} />
             </Badge>
           </IconButton>

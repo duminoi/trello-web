@@ -39,7 +39,7 @@ export default function ModeSelect() {
         onChange={handleChange}
         sx={{
           color: 'white',
-          '& fieldset': {
+          '& .MuiOutlinedInput-notchedOutline': {
             borderColor: 'white'
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
@@ -49,6 +49,9 @@ export default function ModeSelect() {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: 'white'
             }
+          },
+          '& .MuiSvgIcon-root': {
+            color: 'white'
           }
         }}
       >
