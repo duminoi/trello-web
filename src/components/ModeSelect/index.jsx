@@ -11,8 +11,6 @@ import Box from '@mui/material/Box'
 
 export default function ModeSelect() {
   const { mode, setMode } = useColorScheme()
-  console.log('🚀 ~ ModeSelect ~ mode:', mode)
-
   const handleChange = (event) => {
     const selectMode = event.target.value
     setMode(selectMode)

@@ -41,7 +41,7 @@ export default function Workspaces() {
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button'
+          'aria-labelledby': 'basic-button-workspaces'
         }}
       >
         <MenuItem>

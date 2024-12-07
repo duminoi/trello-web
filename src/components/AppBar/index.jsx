@@ -38,8 +38,9 @@ export default function AppBar() {
         paddingY: 4,
         overflowX: 'auto',
         overflowY: 'hidden',
-        bgcolor: (theme) =>
-          theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
+        bgcolor: (theme) => {
+          return theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
+        }
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
