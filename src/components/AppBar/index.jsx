@@ -29,17 +29,18 @@ export default function AppBar() {
     <Box
       sx={{
         width: '100%',
-        height: '48px',
+        height: (theme) => theme.trello.appBarHeight,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 2,
         paddingX: 2,
-        paddingY: 4,
         overflowX: 'auto',
-        overflowY: 'hidden',
         bgcolor: (theme) => {
           return theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'
+        },
+        '&::-webkit-scrollbar-track': {
+          m: 2
         }
       }}
     >

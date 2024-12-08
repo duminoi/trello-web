@@ -61,6 +61,16 @@ const theme = extendTheme({
         }
       }
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          // color: theme.palette.primary.main,
+          '&.MuiTypography-body1': {
+            fontSize: '0.875rem'
+          }
+        }
+      }
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
