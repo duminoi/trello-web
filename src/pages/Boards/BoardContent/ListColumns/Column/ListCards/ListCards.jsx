@@ -48,7 +48,7 @@ export default function ListCards() {
       <Card temporaryHideMedia />
       <Card temporaryHideMedia />
       <Card temporaryHideMedia />
-      <Card temporaryHideMedia />   
+      <Card temporaryHideMedia />
       <Card temporaryHideMedia />
     </Box>
   )
