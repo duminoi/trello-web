@@ -3,7 +3,7 @@ import Column from './Column/Column'
 import { Button } from '@mui/material'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
 
-export default function ListColumns() {
+export default function ListColumns({ columns }) {
   return (
     <Box
       sx={{
@@ -18,11 +18,11 @@ export default function ListColumns() {
         }
       }}
     >
-      <Column />
-      <Column />
-      <Column />
+      {columns?.map((column) => (
+        <Column key={column._id} column={column}></Column>
+      ))}
 
-      {/* Box Add new column CTA */}
+      {/* Box Add new column */}
       <Box
         sx={{
           minWidth: '200px',

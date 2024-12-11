@@ -13,7 +13,7 @@ import { Tooltip } from '@mui/material'
 import avatar from '~/assets/Avatar/dog.jfif'
 import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
-
+import { capitalizeFirstLetter } from '~/utils/formatters'
 const MENU_STYLE = {
   color: 'white',
   backgroundColor: 'transparent',
@@ -27,7 +27,7 @@ const MENU_STYLE = {
     bgcolor: 'primary.50'
   }
 }
-export default function BoardBar() {
+export default function BoardBar({ board }) {
   return (
     <Box
       sx={{
@@ -52,13 +52,13 @@ export default function BoardBar() {
         <Chip
           sx={MENU_STYLE}
           icon={<DashboardIcon />}
-          label="duminoi Fullstack web"
+          label={board?.title}
           clickable
         />
         <Chip
           sx={MENU_STYLE}
           icon={<VpnLockIcon />}
-          label="Public/private workspace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <Chip

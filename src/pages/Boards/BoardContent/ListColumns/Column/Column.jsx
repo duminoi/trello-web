@@ -16,8 +16,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
+import { mapOrder } from '~/utils/sorts'
 
-export default function Column() {
+export default function Column({ column }) {
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -59,7 +62,7 @@ export default function Column() {
             cursor: 'pointer'
           }}
         >
-          Column Title
+          {column?.title}
         </Typography>
         <Box>
           <Tooltip title="More options">
@@ -123,7 +126,7 @@ export default function Column() {
       </Box>
 
       {/*List cards of Column  */}
-      <ListCards />
+      <ListCards cards={orderedCards} />
 
       {/* Footer of Column */}
       <Box
