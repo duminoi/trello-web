@@ -1,8 +1,9 @@
 // import React from 'react'
 import { Box } from '@mui/material'
 import ListColumns from './ListColumns/ListColumns'
-
-export default function BoardContent() {
+import { mapOrder } from '~/utils/sorts'
+export default function BoardContent({ board }) {
+  const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
   return (
     <Box
       sx={{
@@ -13,7 +14,7 @@ export default function BoardContent() {
         p: '10px 0'
       }}
     >
-      <ListColumns />
+      <ListColumns columns={orderedColumns} />
     </Box>
   )
 }
