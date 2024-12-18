@@ -29,6 +29,9 @@ export default function Column({ column }) {
     })
 
   const dndKitColumnStyles = {
+    // touchAction: 'none', // Dành cho sensor default dạng Pointer Sensor
+    // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch
+    // https://github.com/clauderic/dnd-kit/issues/117
     transform: CSS.Translate.toString(transform),
     transition
   }

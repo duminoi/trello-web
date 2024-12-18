@@ -3,7 +3,14 @@ import { Box } from '@mui/material'
 import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
 
-import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import {
+  DndContext,
+  PointerSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
 
@@ -11,13 +18,30 @@ export default function BoardContent({ board }) {
   const [orderedColumn, setOrderedColumn] = useState([])
 
   //https://docs.dndkit.com/api-documentation/sensors#ussesensor
+  // Nếu dùng pointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
+  // const pointerSensor = useSensor(PointerSensor, {
+  //   activationConstraint: {
+  //     distance: 10
+  //   }
+  // })
+
   // Yêu cầu chuột phải di chuyển chuột 10px thì mới kích hoạt event, fix trường hợp click bị gọi event
-  const pointerSensor = useSensor(PointerSensor, {
+  const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
     }
   })
-  const mySensors = useSensors(pointerSensor)
+
+  // Nhấn giữ 250ms và dung sai của cảm ứng thì mới kích hoạt event
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 500
+    }
+  })
+
+  // Ưu tiên sử dụng kết hợp 2 loại sensors là mouse và touch để có trải nghiệm trên mobile tốt nhất, tránh bị bug
+  const mySensors = useSensors(mouseSensor, touchSensor)
 
   const handleDragEnd = (event) => {
     console.log('🚀 ~ handleDragEnd ~ event:', event)
