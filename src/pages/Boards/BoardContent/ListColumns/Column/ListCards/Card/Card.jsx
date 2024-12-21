@@ -8,7 +8,24 @@ import GroupIcon from '@mui/icons-material/Group'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 export default function Card({ card }) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: card._id,
+      data: { ...card }
+    })
+
+  const dndKitCardStyles = {
+    // touchAction: 'none', // Dành cho sensor default dạng Pointer Sensor
+    // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch
+    // https://github.com/clauderic/dnd-kit/issues/117
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
   const isShowCardAction = () => {
     return (
       Boolean(card?.memberIds?.length) ||
@@ -19,6 +36,10 @@ export default function Card({ card }) {
 
   return (
     <MuiCard
+      ref={setNodeRef}
+      style={dndKitCardStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
