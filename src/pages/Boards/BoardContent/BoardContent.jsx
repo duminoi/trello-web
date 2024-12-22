@@ -14,6 +14,11 @@ import {
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
 
+const ACTIVE_DRAG_ITEM_TYPE = {
+  COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
+  CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
+}
+
 export default function BoardContent({ board }) {
   const [orderedColumn, setOrderedColumn] = useState([])
 
@@ -42,6 +47,10 @@ export default function BoardContent({ board }) {
 
   // Ưu tiên sử dụng kết hợp 2 loại sensors là mouse và touch để có trải nghiệm trên mobile tốt nhất, tránh bị bug
   const mySensors = useSensors(mouseSensor, touchSensor)
+
+  const handleDragStart = (event) => {
+    console.log('🚀 ~ handleDragStart ~ event:', event)
+  }
 
   const handleDragEnd = (event) => {
     console.log('🚀 ~ handleDragEnd ~ event:', event)
@@ -75,7 +84,11 @@ export default function BoardContent({ board }) {
   }, [board])
 
   return (
-    <DndContext onDragEnd={handleDragEnd} sensors={mySensors}>
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      sensors={mySensors}
+    >
       <Box
         sx={{
           bgcolor: (theme) =>

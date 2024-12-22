@@ -12,18 +12,25 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 export default function Card({ card }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: card._id,
-      data: { ...card }
-    })
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({
+    id: card._id,
+    data: { ...card }
+  })
 
   const dndKitCardStyles = {
     // touchAction: 'none', // Dành cho sensor default dạng Pointer Sensor
     // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch
     // https://github.com/clauderic/dnd-kit/issues/117
     transform: CSS.Translate.toString(transform),
-    transition
+    transition,
+    opacity: isDragging ? 0.5 : undefined
   }
 
   const isShowCardAction = () => {
