@@ -9,7 +9,8 @@ import {
   MouseSensor,
   TouchSensor,
   useSensor,
-  useSensors
+  useSensors,
+  DragOverlay
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
@@ -21,6 +22,13 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 
 export default function BoardContent({ board }) {
   const [orderedColumn, setOrderedColumn] = useState([])
+
+  //Cùng một thời điểm chỉ có một phần tử đang được kéo (column hoặc card)
+  const [activeDragItemId, setActiveDragItemId] = useState(null)
+  const [activeDragItemType, setActiveDragItemType] = useState(null)
+  const [activeDragItemData, setActiveDragItemData] = useState(null)
+  // hoặc có thể gộp lại state (tùy)
+  // console.log('component re-render')
 
   //https://docs.dndkit.com/api-documentation/sensors#ussesensor
   // Nếu dùng pointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
@@ -49,11 +57,16 @@ export default function BoardContent({ board }) {
   const mySensors = useSensors(mouseSensor, touchSensor)
 
   const handleDragStart = (event) => {
-    console.log('🚀 ~ handleDragStart ~ event:', event)
+    setActiveDragItemId(event?.active?.id)
+    setActiveDragItemType(
+      event?.active?.data?.current?.columnId
+        ? ACTIVE_DRAG_ITEM_TYPE.CARD
+        : ACTIVE_DRAG_ITEM_TYPE.COLUMN
+    )
+    setActiveDragItemData(event?.active?.data?.current)
   }
 
   const handleDragEnd = (event) => {
-    console.log('🚀 ~ handleDragEnd ~ event:', event)
     const { active, over } = event
     // Nếu kéo linh tinh(ko tồn tại over) thì sẽ return luôn tránh lỗi
     if (!over) return
@@ -65,7 +78,7 @@ export default function BoardContent({ board }) {
       // Lấy vị trí mới(từ over)
       const newIndex = orderedColumn.findIndex((c) => c._id === over.id)
 
-      // Dùng arrayMove của thằng dnd-kit để săp xếp lại mảng Columns ban đầu
+      // Dùng arrayMove của dnd-kit để săp xếp lại mảng Columns ban đầu
       const dndOrderedColumns = arrayMove(orderedColumn, oldIndex, newIndex)
       // 2 cái console.log dữ liệu này dùng để xử lý gọi API
       // const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
@@ -77,6 +90,10 @@ export default function BoardContent({ board }) {
 
       setOrderedColumn(dndOrderedColumns)
     }
+
+    setActiveDragItemData(null)
+    setActiveDragItemId(null)
+    setActiveDragItemType(null)
   }
 
   useEffect(() => {
@@ -99,6 +116,9 @@ export default function BoardContent({ board }) {
         }}
       >
         <ListColumns columns={orderedColumn} />
+        <DragOverlay>
+          {!activeDragItemId || (!activeDragItemType && null)}
+        </DragOverlay>
       </Box>
     </DndContext>
   )
