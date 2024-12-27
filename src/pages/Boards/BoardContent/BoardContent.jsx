@@ -5,15 +5,19 @@ import { mapOrder } from '~/utils/sorts'
 
 import {
   DndContext,
-  PointerSensor,
+  // PointerSensor,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
-  DragOverlay
+  DragOverlay,
+  defaultDropAnimationSideEffects
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
+
+import Column from './ListColumns/Column/Column'
+import Card from './ListColumns/Column/ListCards/Card/Card'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -56,6 +60,7 @@ export default function BoardContent({ board }) {
   // Ưu tiên sử dụng kết hợp 2 loại sensors là mouse và touch để có trải nghiệm trên mobile tốt nhất, tránh bị bug
   const mySensors = useSensors(mouseSensor, touchSensor)
 
+  // Trigger khi bắt đầu kéo một phần tử
   const handleDragStart = (event) => {
     setActiveDragItemId(event?.active?.id)
     setActiveDragItemType(
@@ -66,6 +71,7 @@ export default function BoardContent({ board }) {
     setActiveDragItemData(event?.active?.data?.current)
   }
 
+  //Trigger khi kết thúc hành động kéo(drag) một phần tử => hành động thả (drop)
   const handleDragEnd = (event) => {
     const { active, over } = event
     // Nếu kéo linh tinh(ko tồn tại over) thì sẽ return luôn tránh lỗi
@@ -96,6 +102,13 @@ export default function BoardContent({ board }) {
     setActiveDragItemType(null)
   }
 
+  // Animation khi drop phần tử - Test bằng cách kéo xong thả trực tiếp và nhìn phần giữ chỗ OverLay
+  const customDropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: { active: { opacity: '0.5' } }
+    })
+  }
+
   useEffect(() => {
     setOrderedColumn(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
   }, [board])
@@ -116,8 +129,16 @@ export default function BoardContent({ board }) {
         }}
       >
         <ListColumns columns={orderedColumn} />
-        <DragOverlay>
-          {!activeDragItemId || (!activeDragItemType && null)}
+        <DragOverlay dropAnimation={customDropAnimation}>
+          {!activeDragItemType && null}
+          {activeDragItemId &&
+            activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
+              <Column column={activeDragItemData} />
+            )}
+          {activeDragItemId &&
+            activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
+              <Card card={activeDragItemData} />
+            )}
         </DragOverlay>
       </Box>
     </DndContext>
