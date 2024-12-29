@@ -71,8 +71,24 @@ export default function BoardContent({ board }) {
     setActiveDragItemData(event?.active?.data?.current)
   }
 
+  // Trigger trong quá trình kéo (drag) một phần tử
+  const handleDragOver = (event) => {
+    // Không làm gì thêm nếu đang kéo column
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return
+
+    console.log('🚀 ~ handleDragOver ~ event:', event)
+    // Card
+  }
+
   //Trigger khi kết thúc hành động kéo(drag) một phần tử => hành động thả (drop)
   const handleDragEnd = (event) => {
+    console.log('🚀 ~ handleDragEnd ~ event:', event)
+
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      console.log('Kéo thả card - tạm thời không làm gì cả')
+      return
+    }
+
     const { active, over } = event
     // Nếu kéo linh tinh(ko tồn tại over) thì sẽ return luôn tránh lỗi
     if (!over) return
@@ -115,9 +131,10 @@ export default function BoardContent({ board }) {
 
   return (
     <DndContext
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
       sensors={mySensors}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
     >
       <Box
         sx={{
