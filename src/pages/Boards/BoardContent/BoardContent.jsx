@@ -5,17 +5,34 @@ import { mapOrder } from '~/utils/sorts'
 
 import {
   DndContext,
-  PointerSensor,
+  // PointerSensor,
   MouseSensor,
   TouchSensor,
   useSensor,
-  useSensors
+  useSensors,
+  DragOverlay,
+  defaultDropAnimationSideEffects
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
 
+import Column from './ListColumns/Column/Column'
+import Card from './ListColumns/Column/ListCards/Card/Card'
+
+const ACTIVE_DRAG_ITEM_TYPE = {
+  COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
+  CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
+}
+
 export default function BoardContent({ board }) {
   const [orderedColumn, setOrderedColumn] = useState([])
+
+  //Cùng một thời điểm chỉ có một phần tử đang được kéo (column hoặc card)
+  const [activeDragItemId, setActiveDragItemId] = useState(null)
+  const [activeDragItemType, setActiveDragItemType] = useState(null)
+  const [activeDragItemData, setActiveDragItemData] = useState(null)
+  // hoặc có thể gộp lại state (tùy)
+  // console.log('component re-render')
 
   //https://docs.dndkit.com/api-documentation/sensors#ussesensor
   // Nếu dùng pointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
@@ -43,8 +60,19 @@ export default function BoardContent({ board }) {
   // Ưu tiên sử dụng kết hợp 2 loại sensors là mouse và touch để có trải nghiệm trên mobile tốt nhất, tránh bị bug
   const mySensors = useSensors(mouseSensor, touchSensor)
 
+  // Trigger khi bắt đầu kéo một phần tử
+  const handleDragStart = (event) => {
+    setActiveDragItemId(event?.active?.id)
+    setActiveDragItemType(
+      event?.active?.data?.current?.columnId
+        ? ACTIVE_DRAG_ITEM_TYPE.CARD
+        : ACTIVE_DRAG_ITEM_TYPE.COLUMN
+    )
+    setActiveDragItemData(event?.active?.data?.current)
+  }
+
+  //Trigger khi kết thúc hành động kéo(drag) một phần tử => hành động thả (drop)
   const handleDragEnd = (event) => {
-    console.log('🚀 ~ handleDragEnd ~ event:', event)
     const { active, over } = event
     // Nếu kéo linh tinh(ko tồn tại over) thì sẽ return luôn tránh lỗi
     if (!over) return
@@ -56,7 +84,7 @@ export default function BoardContent({ board }) {
       // Lấy vị trí mới(từ over)
       const newIndex = orderedColumn.findIndex((c) => c._id === over.id)
 
-      // Dùng arrayMove của thằng dnd-kit để săp xếp lại mảng Columns ban đầu
+      // Dùng arrayMove của dnd-kit để săp xếp lại mảng Columns ban đầu
       const dndOrderedColumns = arrayMove(orderedColumn, oldIndex, newIndex)
       // 2 cái console.log dữ liệu này dùng để xử lý gọi API
       // const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
@@ -68,6 +96,17 @@ export default function BoardContent({ board }) {
 
       setOrderedColumn(dndOrderedColumns)
     }
+
+    setActiveDragItemData(null)
+    setActiveDragItemId(null)
+    setActiveDragItemType(null)
+  }
+
+  // Animation khi drop phần tử - Test bằng cách kéo xong thả trực tiếp và nhìn phần giữ chỗ OverLay
+  const customDropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: { active: { opacity: '0.5' } }
+    })
   }
 
   useEffect(() => {
@@ -75,7 +114,11 @@ export default function BoardContent({ board }) {
   }, [board])
 
   return (
-    <DndContext onDragEnd={handleDragEnd} sensors={mySensors}>
+    <DndContext
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      sensors={mySensors}
+    >
       <Box
         sx={{
           bgcolor: (theme) =>
@@ -86,6 +129,17 @@ export default function BoardContent({ board }) {
         }}
       >
         <ListColumns columns={orderedColumn} />
+        <DragOverlay dropAnimation={customDropAnimation}>
+          {!activeDragItemType && null}
+          {activeDragItemId &&
+            activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
+              <Column column={activeDragItemData} />
+            )}
+          {activeDragItemId &&
+            activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
+              <Card card={activeDragItemData} />
+            )}
+        </DragOverlay>
       </Box>
     </DndContext>
   )
