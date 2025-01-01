@@ -60,6 +60,17 @@ export default function BoardContent({ board }) {
   // Ưu tiên sử dụng kết hợp 2 loại sensors là mouse và touch để có trải nghiệm trên mobile tốt nhất, tránh bị bug
   const mySensors = useSensors(mouseSensor, touchSensor)
 
+  // Tìm một Column theo CardId
+  const findColumnByCardId = (cardId) => {
+    // Lưu ý: nên dùng c.cards thay vì c.cardOrderids bởi vì ở bước handleDragOver chúng ta sẽ làm dữ
+    // liệu cho cards hoàn chỉnh trước rồi mới tạo ra cardOrderIds mới
+    return orderedColumn.find((column) =>
+      cardId.includes('column')
+        ? column._id == cardId
+        : column.cards.map((card) => card._id)?.includes(cardId)
+    )
+  }
+
   // Trigger khi bắt đầu kéo một phần tử
   const handleDragStart = (event) => {
     setActiveDragItemId(event?.active?.id)
@@ -73,25 +84,73 @@ export default function BoardContent({ board }) {
 
   // Trigger trong quá trình kéo (drag) một phần tử
   const handleDragOver = (event) => {
+    // console.log('🚀 ~ handleDragOver ~ event:', event)
+
     // Không làm gì thêm nếu đang kéo column
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return
 
-    console.log('🚀 ~ handleDragOver ~ event:', event)
-    // Card
+    // Còn nếu kéo Card thì xử lý thêm để có thể kéo card qua lại giữa các columns
+    // console.log('🚀 ~ handleDragOver ~ event:', event)
+    const { active, over } = event
+
+    // Cần đảm bảo nếu không tồn tại active hoặc over (khi kéo ra khỏi phạm vi container) thì không làm gì (tránh crash trang)
+    if (!over || !active) return
+
+    // activeDraggingCardId: Là card đang được kéo
+    const {
+      id: activeDraggingCardId,
+      data: { current: activeDraggingCardData }
+    } = active
+    // overCard: Là card đang tương tác trên hoặc dưới so với cái card đang được kéo ở trên
+    const { id: overCardId } = over
+
+    // Tìm 2 columns theo cardId
+    const activeColumn = findColumnByCardId(activeDraggingCardId)
+    const overColumn = findColumnByCardId(overCardId)
+
+    if (!activeColumn || !overColumn) return
+
+    // Xử lý logic ở đây chỉ khi KÉO CARD QUA 2 COLUMN KHÁC NHAU, còn nếu kéo card trong chính column ban đầu của nó thì không làm gì
+    // Vì đây đang là đoạn xử lý lúc kéo (handleDragOver), còn xử lý lúc thả thì nó lại là vấn đề khác (handleDragEnd)
+    if (activeColumn._id !== overColumn._id) {
+      setOrderedColumn((prevColumn) => {
+        // Tìm vị trí (index) của overCard trong column đích (nơi card sắp được thả)
+        const overCardIndex = overColumn?.cards?.findIndex(
+          (card) => card._id === overCardId
+        )
+
+        // Logic tính toán "cardIndex mới" (trên hoặc dưới cảu overCard) (của thư viện)
+        let newCardIndex
+        const isBelowOverItem =
+          active.rect.current.translated &&
+          active.rect.current.translated.top > over.rect.top + over.rect.height
+        const modifier = isBelowOverItem ? 1 : 0
+        newCardIndex =
+          overCardIndex >= 0
+            ? overCardIndex + modifier
+            : overColumn?.cards?.length + 1
+
+        console.log('🚀 ~ setOrderedColumn ~ isBelowOverItem:', isBelowOverItem)
+        console.log('🚀 ~ setOrderedColumn ~ modifier:', modifier)
+        console.log('🚀 ~ setOrderedColumn ~ newCardIndex:', newCardIndex)
+        console.log('🚀 ~ setOrderedColumn ~ overCardIndex:', overCardIndex)
+
+        return [...prevColumn]
+      })
+    }
   }
 
   //Trigger khi kết thúc hành động kéo(drag) một phần tử => hành động thả (drop)
   const handleDragEnd = (event) => {
-    console.log('🚀 ~ handleDragEnd ~ event:', event)
-
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      console.log('Kéo thả card - tạm thời không làm gì cả')
+      // console.log('Kéo thả card - tạm thời không làm gì cả')
       return
     }
 
     const { active, over } = event
-    // Nếu kéo linh tinh(ko tồn tại over) thì sẽ return luôn tránh lỗi
-    if (!over) return
+
+    // Cần đảm bảo nếu không tồn tại active hoặc over (khi kéo ra khỏi phạm vi container) thì không làm gì (tránh crash trang)
+    if (!over || !active) return
 
     // Nếu kéo vị trí mới khác vị trí ban đầu
     if (active.id != over.id) {
