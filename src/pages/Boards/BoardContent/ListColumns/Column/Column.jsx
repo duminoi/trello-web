@@ -40,8 +40,9 @@ export default function Column({ column }) {
     // https://github.com/clauderic/dnd-kit/issues/117
     transform: CSS.Translate.toString(transform),
     transition,
-    // Chiều cao phải luôn max 100% vì nếu không sẽ lỗi lúc kéo column ngắn qua một cái column dài thì phải kéo ở khu vục giữa giữa rất khó chịu. Lưu ý lúc này kết hợp với {...listener} nằm ở Box chứ không phải là div ở ngoài cùng để tránh trường hợp kéo vào vùng xanh (demo video 32)
-    // height: '100%',
+    // Chiều cao phải luôn max 100% vì nếu không sẽ lỗi lúc kéo column ngắn qua một cái column dài thì phải kéo ở khu vục giữa giữa rất khó chịu.
+    // Lưu ý lúc này kết hợp với {...listener} nằm ở Box chứ không phải là div ở ngoài cùng để tránh trường hợp kéo vào vùng xanh (demo video 32)
+    height: '100%',
     opacity: isDragging ? 0.5 : undefined
   }
 
@@ -57,7 +58,7 @@ export default function Column({ column }) {
   }
   return (
     //  Box Column Test 01
-    // Phải bọc div ở đây vì vấn đề chiều cao của column khi kéo thả sẽ có bug là flickering(video 32)
+    // Phải bọc div ở đây vì vấn đề chiều cao của column khi kéo thả sẽ có bug là flickering (video 32)
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
         {...listeners}

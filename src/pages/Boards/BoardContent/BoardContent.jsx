@@ -132,7 +132,7 @@ export default function BoardContent({ board }) {
 
         // Clone mảng OrderedColumnsState cũ ra một cái mới để xử lý data rồi return - cập nhật lại OrderedColumnsState
         const nextColumns = cloneDeep(prevColumns)
-
+        //
         const nextActiveColumn = nextColumns.find(
           (column) => column._id === activeColumn._id
         )
@@ -141,7 +141,7 @@ export default function BoardContent({ board }) {
           (column) => column._id === overColumn._id
         )
 
-        // Column cũ
+        // Column cũ (column mà card đang kéo)
         if (nextActiveColumn) {
           // Xóa card đang kéo ở cái column đang active
           nextActiveColumn.cards = nextActiveColumn.cards.filter(
@@ -153,7 +153,7 @@ export default function BoardContent({ board }) {
           )
         }
 
-        // Column mới
+        // Column mới (column mà card di chuyển tới)
         if (nextOverColumn) {
           // Kiểm tra xem card đang kéo có tồn tại ở overColumn chưa, nếu có thì cần xóa nó trước
           nextOverColumn.cards = nextOverColumn.cards.filter(
