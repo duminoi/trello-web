@@ -61,6 +61,7 @@ export default function Column({ column }) {
     // Phải bọc div ở đây vì vấn đề chiều cao của column khi kéo thả sẽ có bug là flickering (video 32)
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
+        //  {...listeners} ở đây chứ không phải trên div vì chỉ muốn phần nội dung được kéo thả chứ không phải là khoảng trắng chứa box này cũng kéo thả đc(có thể thử bõ lên trên để thấy sự khác biệt)
         {...listeners}
         sx={{
           minWidth: '300px',
