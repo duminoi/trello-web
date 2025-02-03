@@ -109,6 +109,7 @@ export default function BoardContent({ board }) {
     const activeColumn = findColumnByCardId(activeDraggingCardId)
     const overColumn = findColumnByCardId(overCardId)
 
+    // Nếu không tồn tại 1 trong 2 column thì không làm gì hết, tránh crash trang web
     if (!activeColumn || !overColumn) return
 
     // Xử lý logic ở đây chỉ khi KÉO CARD QUA 2 COLUMN KHÁC NHAU, còn nếu kéo card trong chính column ban đầu của nó thì không làm gì
@@ -120,7 +121,7 @@ export default function BoardContent({ board }) {
           (card) => card._id === overCardId
         )
 
-        // Logic tính toán "cardIndex mới" (trên hoặc dưới cảu overCard) (của thư viện DndKit)
+        // Logic tính toán "cardIndex mới" (trên hoặc dưới của overCard) (của thư viện DndKit)
         let newCardIndex
         const isBelowOverItem =
           active.rect.current.translated &&
@@ -181,34 +182,57 @@ export default function BoardContent({ board }) {
 
   //Trigger khi kết thúc hành động kéo(drag) một phần tử => hành động thả (drop)
   const handleDragEnd = (event) => {
-    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      // console.log('Kéo thả card - tạm thời không làm gì cả')
-      return
-    }
-
     const { active, over } = event
+    console.log('🚀 ~ handleDragEnd ~ event:', event)
 
     // Cần đảm bảo nếu không tồn tại active hoặc over (khi kéo ra khỏi phạm vi container) thì không làm gì (tránh crash trang)
     if (!over || !active) return
 
-    // Nếu kéo vị trí mới khác vị trí ban đầu
-    if (active.id != over.id) {
-      // Lấy vị trí cũ(từ active)
-      const oldIndex = orderedColumns.findIndex((c) => c._id === active.id)
-      // Lấy vị trí mới(từ over)
-      const newIndex = orderedColumns.findIndex((c) => c._id === over.id)
+    // Xử lý kéo thả cards
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      // activeDraggingCardId: Là card đang được kéo
+      const {
+        id: activeDraggingCardId,
+        data: { current: activeDraggingCardData }
+      } = active
+      // overCard: Là card đang tương tác trên hoặc dưới so với cái card đang được kéo ở trên
+      const { id: overCardId } = over
 
-      // Dùng arrayMove của dnd-kit để săp xếp lại mảng Columns ban đầu
-      const dndOrderedColumns = arrayMove(orderedColumns, oldIndex, newIndex)
-      // 2 cái console.log dữ liệu này dùng để xử lý gọi API
-      // const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
-      // console.log('🚀 ~ handleDragEnd ~ dndOrderedColumns:', dndOrderedColumns)
-      // console.log(
-      //   '🚀 ~ handleDragEnd ~ dndOrderedColumnsIds:',
-      //   dndOrderedColumnsIds
-      // )
+      // Tìm 2 columns theo cardId
+      const activeColumn = findColumnByCardId(activeDraggingCardId)
+      const overColumn = findColumnByCardId(overCardId)
 
-      setOrderedColumns(dndOrderedColumns)
+      // Nếu không tồn tại 1 trong 2 column thì không làm gì hết, tránh crash trang web
+      if (!activeColumn || !overColumn) return
+
+      if (activeColumn._id !== overColumn._id) {
+        console.log('hành động kéo khi khác column')
+      } else {
+        console.log('hành động kéo khi cùng column')
+      }
+    }
+
+    // Xử lý kéo thả columns
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+      // Nếu kéo vị trí mới khác vị trí ban đầu
+      if (active.id != over.id) {
+        // Lấy vị trí cũ(từ active)
+        const oldIndex = orderedColumns.findIndex((c) => c._id === active.id)
+        // Lấy vị trí mới(từ over)
+        const newIndex = orderedColumns.findIndex((c) => c._id === over.id)
+
+        // Dùng arrayMove của dnd-kit để săp xếp lại mảng Columns ban đầu
+        const dndOrderedColumns = arrayMove(orderedColumns, oldIndex, newIndex)
+        // 2 cái console.log dữ liệu này dùng để xử lý gọi API
+        // const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id)
+        // console.log('🚀 ~ handleDragEnd ~ dndOrderedColumns:', dndOrderedColumns)
+        // console.log(
+        //   '🚀 ~ handleDragEnd ~ dndOrderedColumnsIds:',
+        //   dndOrderedColumnsIds
+        // )
+
+        setOrderedColumns(dndOrderedColumns)
+      }
     }
 
     setActiveDragItemData(null)
